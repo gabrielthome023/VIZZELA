@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Beauty Business — Pedidos Mascavo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --bg:      #fefaf6;
+  --bg2:     #fdf3ea;
+  --surface: #ffffff;
+  --border:  #f0e0d0;
+  --border2: #e0c4a8;
+  --caramel: #c4885a;
+  --caramel2:#a8673e;
+  --espresso:#6b3a2a;
+  --espresso-d:#4a2518;
+  --nude:    #fdf6f0;
+  --text:    #1a0e08;
+  --text2:   #2a1810;
+  --muted:   #7a6358;
+  --success: #7d9e5f;
+  --danger:  #c4503a;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#fdf6f0 0%,#faeee0 100%);
+  border-bottom:1.5px solid #e0c4a8;
+  padding:28px 24px 22px;
+  text-align:center;
+}
+.hero-eyebrow{
+  font-family:"DM Sans",sans-serif;
+  font-size:0.6rem;font-weight:500;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--caramel);margin-bottom:8px;
+}
+.hero-brand{
+  font-family:"Cormorant Garamond",serif;
+  font-size:2.4rem;font-weight:500;
+  letter-spacing:10px;text-transform:uppercase;
+  color:var(--espresso-d);line-height:1;
+  margin-bottom:8px;
+}
+.hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:1px;}
+
+/* STICKY NAV */
+.nav{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 20px;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+  box-shadow:0 1px 12px rgba(42,20,10,0.06);
+}
+.nav-left{display:flex;align-items:center;gap:10px}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--success)}
+.nav-brand{
+  font-family:"Cormorant Garamond",serif;
+  font-size:1rem;font-weight:400;font-style:italic;
+  color:var(--espresso-d);letter-spacing:2px;
+}
+.nav-tag{
+  font-size:0.6rem;font-weight:500;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--muted);
+  background:var(--nude);border:1px solid var(--border);
+  padding:2px 8px;border-radius:20px;
+}
+.admin-btn{
+  background:none;border:none;
+  color:rgba(106,58,42,0.2);
+  font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;padding:4px 8px;transition:color 0.3s;
+  font-family:"DM Sans",sans-serif;
+}
+.admin-btn:hover{color:rgba(106,58,42,0.5)}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block}
+#page-client{padding-bottom:140px}
+
+/* WRAP */
+.wrap{max-width:580px;margin:0 auto;padding:0 16px}
+
+/* CART FAB */
+.cart-fab{
+  position:fixed;top:60px;right:12px;z-index:99;
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:50%;width:42px;height:42px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 10px rgba(42,20,10,0.1);
+  transition:box-shadow 0.2s;
+}
+.cart-fab:hover{box-shadow:0 4px 16px rgba(164,100,60,0.22)}
+.cart-fab svg{display:block;flex-shrink:0;}
+.cart-badge{
+  position:absolute;top:-5px;right:-5px;
+  background:var(--caramel);color:#fff;
+  font-family:"DM Sans",sans-serif;
+  font-size:0.58rem;font-weight:700;
+  min-width:17px;height:17px;
+  border-radius:20px;
+  align-items:center;justify-content:center;
+  padding:0 4px;
+  border:2px solid #fff;
+  display:none;
+}
+
+/* IDENT CARD */
+.ident-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  margin-top:20px;
+  box-shadow:0 2px 16px rgba(42,20,10,0.04);
+}
+.ident-label{
+  font-size:0.62rem;font-weight:600;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;
+}
+.ident-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.ident-field{
+  background:var(--nude);
+  border:1.5px solid var(--border);
+  border-radius:12px;padding:13px 15px;
+  font-family:"DM Sans",sans-serif;
+  font-size:15px;font-weight:300;
+  color:var(--text);outline:none;
+  transition:all 0.2s;width:100%;
+}
+.ident-field:focus{border-color:var(--caramel);background:#fff;box-shadow:0 0 0 3px rgba(196,136,90,0.12)}
+.ident-field::placeholder{color:var(--muted);font-size:13px}
+
+/* TABS */
+.tabs-wrap{margin-top:14px}
+.tabs{
+  display:grid;grid-template-columns:1fr 1fr;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;padding:4px;gap:4px;
+  box-shadow:0 2px 12px rgba(42,20,10,0.04);
+}
+.tab-btn{
+  background:none;border:none;
+  padding:10px 8px;border-radius:11px;
+  font-family:"DM Sans",sans-serif;
+  font-size:0.72rem;font-weight:400;
+  letter-spacing:0.5px;color:var(--muted);
+  cursor:pointer;transition:all 0.2s;
+}
+.tab-btn.active{
+  background:linear-gradient(135deg,#fdf0e4 0%,#f8e0c8 100%);
+  color:var(--espresso-d);font-weight:600;
+  box-shadow:0 1px 6px rgba(164,100,60,0.15);
+}
+
+/* SEARCH */
+.search-wrap{margin-top:10px}
+.search-box{
+  display:flex;align-items:center;gap:10px;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:14px;
+  padding:12px 16px;
+  transition:all 0.2s;
+  box-shadow:0 2px 12px rgba(42,20,10,0.03);
+}
+.search-box:focus-within{border-color:var(--caramel);box-shadow:0 0 0 3px rgba(196,136,90,0.10)}
+.search-icon{color:var(--caramel2);font-size:0.85rem;flex-shrink:0}
+.search-box input{
+  flex:1;background:none;border:none;outline:none;
+  font-family:"DM Sans",sans-serif;
+  font-size:15px;font-weight:300;color:var(--text);
+}
+.search-box input::placeholder{color:var(--muted);font-size:13px}
+.search-clear{background:none;border:none;color:var(--muted);font-size:0.78rem;cursor:pointer;display:none;align-items:center;flex-shrink:0;padding:2px 4px}
+.search-clear.visible{display:flex}
+.results-info{font-size:0.68rem;color:var(--muted);letter-spacing:0.3px;margin-top:6px;padding:0 2px}
+.clear-all-wrap{display:flex;justify-content:flex-end;margin-top:8px}
+.clear-btn{
+  background:none;border:1px solid var(--border2);
+  color:var(--muted);font-family:"DM Sans",sans-serif;
+  font-size:0.65rem;letter-spacing:1px;text-transform:uppercase;
+  padding:5px 12px;cursor:pointer;border-radius:20px;transition:all 0.2s;
+}
+.clear-btn:hover{border-color:var(--danger);color:var(--danger)}
+
+/* CATEGORY HEADER */
+.category-header{
+  font-family:"Cormorant Garamond",serif;
+  font-style:italic;font-size:1rem;
+  color:var(--espresso-d);letter-spacing:1px;
+  margin:20px 0 8px;
+  display:flex;align-items:center;gap:12px;
+}
+.category-header::before{content:"";display:block;width:20px;height:1px;background:var(--caramel)}
+.category-header::after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* PRODUCT CARDS */
+.items-list{display:flex;flex-direction:column;gap:7px;margin-bottom:6px}
+.item-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px 16px;
+  display:flex;align-items:center;gap:14px;
+  transition:all 0.2s;
+}
+.item-card:hover{border-color:var(--caramel);box-shadow:0 2px 12px rgba(106,58,42,0.07)}
+.item-card.active{
+  border-color:var(--caramel2);
+  background:linear-gradient(135deg,#fdf0e4 0%,#f8e4d0 100%);
+  box-shadow:0 3px 16px rgba(164,100,60,0.13);
+}
+.item-info{flex:1;min-width:0}
+.item-name{font-size:0.88rem;font-weight:400;line-height:1.4;color:var(--text)}
+.item-name em{font-style:normal;background:rgba(196,136,90,0.18);border-radius:3px;padding:0 2px}
+.item-meta{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap}
+.item-cod{
+  font-size:0.65rem;color:var(--muted);
+  background:var(--nude);border:1px solid var(--border);
+  padding:2px 7px;border-radius:6px;letter-spacing:0.5px;font-weight:500;
+}
+.item-price{font-size:0.9rem;color:var(--caramel2);font-weight:600}
+.item-subtotal{font-size:0.7rem;color:var(--espresso);font-weight:500;display:none;margin-top:3px}
+.item-subtotal.visible{display:block}
+
+/* QTY */
+.qty-ctrl{
+  display:flex;align-items:center;
+  background:var(--nude);
+  border:1.5px solid var(--border);
+  border-radius:12px;overflow:hidden;flex-shrink:0;
+}
+.item-card.active .qty-ctrl{border-color:var(--caramel);background:#fff}
+.qty-btn{
+  background:none;border:none;color:var(--text2);
+  width:40px;height:40px;font-size:1.2rem;font-weight:300;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  user-select:none;touch-action:manipulation;transition:background 0.1s;
+}
+.qty-btn:active{background:var(--border)}
+.qty-num{
+  font-family:"Cormorant Garamond",serif;
+  font-size:1.1rem;min-width:34px;text-align:center;color:var(--muted);
+}
+.qty-num.has{color:var(--espresso-d);font-weight:600}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:60px 20px;color:var(--muted)}
+.no-results div{font-size:1.4rem;margin-bottom:10px;opacity:0.25}
+.no-results p{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1rem;line-height:1.7}
+
+/* FOOTER */
+.order-footer{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  padding:12px 16px;z-index:100;
+  box-shadow:0 -4px 24px rgba(42,20,10,0.07);
+}
+.footer-inner{max-width:580px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.footer-info{flex:1}
+.footer-label{font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px}
+.footer-total{
+  font-family:"Cormorant Garamond",serif;
+  font-size:1.6rem;font-weight:500;color:var(--espresso-d);
+  line-height:1;margin-top:2px;
+}
+.footer-items{font-size:0.65rem;color:var(--muted);margin-top:3px;letter-spacing:0.3px}
+.confirm-btn{
+  background:linear-gradient(135deg,var(--caramel) 0%,var(--caramel2) 100%);
+  color:#fff;border:none;border-radius:14px;
+  padding:16px 24px;font-family:"DM Sans",sans-serif;
+  font-size:0.82rem;font-weight:500;letter-spacing:0.5px;
+  cursor:pointer;transition:all 0.2s;flex-shrink:0;
+  box-shadow:0 3px 14px rgba(164,100,60,0.3);
+}
+.confirm-btn:hover{box-shadow:0 5px 20px rgba(164,100,60,0.4);transform:translateY(-1px)}
+.confirm-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+
+/* CART DRAWER */
+.cart-drawer-overlay{
+  display:none;position:fixed;inset:0;background:rgba(20,10,5,0.35);z-index:200;
+  backdrop-filter:blur(2px);
+}
+.cart-drawer-overlay.open{display:block}
+.cart-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(360px,94vw);
+  background:var(--surface);z-index:201;
+  transform:translateX(100%);transition:transform 0.3s cubic-bezier(.32,.72,0,1);
+  display:flex;flex-direction:column;
+  box-shadow:-8px 0 40px rgba(42,20,10,0.12);
+}
+.cart-drawer.open{transform:translateX(0)}
+.cart-drawer-header{
+  padding:20px 20px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cart-drawer-title{
+  font-family:"Cormorant Garamond",serif;
+  font-size:1.2rem;color:var(--espresso-d);letter-spacing:1px;
+}
+.cart-drawer-close{
+  background:none;border:none;font-size:1rem;color:var(--muted);
+  cursor:pointer;padding:4px 8px;border-radius:8px;transition:background 0.2s;
+}
+.cart-drawer-close:hover{background:var(--nude)}
+.cart-drawer-body{flex:1;overflow-y:auto;padding:14px 16px}
+.cart-drawer-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:0.85rem;font-style:italic}
+.cart-drawer-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.cart-drawer-item:last-child{border-bottom:none}
+.cdi-info{flex:1;min-width:0}
+.cdi-name{font-size:0.8rem;color:var(--text);line-height:1.35;font-weight:400}
+.cdi-qty{font-size:0.68rem;color:var(--muted);margin-top:2px}
+.cdi-price{font-size:0.85rem;color:var(--caramel2);font-weight:600;flex-shrink:0}
+.cart-drawer-footer{
+  padding:16px;border-top:1px solid var(--border);
+  background:var(--nude);
+}
+.cart-drawer-total{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:14px;
+}
+.cart-drawer-total span:first-child{font-size:0.75rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.cart-drawer-total span:last-child{
+  font-family:"Cormorant Garamond",serif;
+  font-size:1.5rem;color:var(--espresso-d);font-weight:500;
+}
+.cart-drawer-confirm{
+  width:100%;background:linear-gradient(135deg,var(--caramel) 0%,var(--caramel2) 100%);
+  color:#fff;border:none;border-radius:12px;
+  padding:14px;font-family:"DM Sans",sans-serif;
+  font-size:0.85rem;font-weight:500;cursor:pointer;
+  box-shadow:0 3px 14px rgba(164,100,60,0.28);
+  transition:all 0.2s;
+}
+.cart-drawer-confirm:hover{box-shadow:0 5px 20px rgba(164,100,60,0.38)}
+
+/* MODAL */
+.overlay{
+  display:none;position:fixed;inset:0;background:rgba(20,10,5,0.5);
+  z-index:300;align-items:flex-end;justify-content:center;
+  backdrop-filter:blur(3px);
+}
+.overlay.open{display:flex}
+.modal{
+  background:var(--surface);
+  border-radius:24px 24px 0 0;
+  padding:24px 20px 36px;
+  width:100%;max-width:580px;
+  max-height:90vh;overflow-y:auto;
+}
+.modal-handle{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 20px;opacity:0.5}
+.modal-title{
+  font-family:"Cormorant Garamond",serif;
+  font-size:1.4rem;color:var(--espresso-d);letter-spacing:1px;
+  margin-bottom:4px;
+}
+.modal-sub{font-size:0.7rem;color:var(--muted);margin-bottom:18px;letter-spacing:0.5px}
+.modal-list{margin-bottom:16px}
+.modal-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding:10px 0;border-bottom:1px solid var(--border);gap:12px;
+}
+.modal-row:last-child{border-bottom:none}
+.modal-row-name{font-size:0.82rem;color:var(--text);flex:1;line-height:1.4}
+.modal-row-qty{font-size:0.72rem;color:var(--muted);margin-top:2px}
+.modal-row-price{font-size:0.9rem;color:var(--caramel2);font-weight:600;flex-shrink:0}
+.modal-total-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 0 0;margin-top:4px;
+  border-top:2px solid var(--border2);
+}
+.modal-total-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px}
+.modal-total-val{
+  font-family:"Cormorant Garamond",serif;
+  font-size:1.6rem;color:var(--espresso-d);font-weight:500;
+}
+.modal-obs-wrap{margin:16px 0}
+.modal-obs-label{font-size:0.68rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.modal-obs-field{
+  width:100%;background:var(--nude);
+  border:1.5px solid var(--border);border-radius:12px;
+  padding:12px 14px;font-family:"DM Sans",sans-serif;
+  font-size:14px;font-weight:300;color:var(--text);
+  resize:none;outline:none;min-height:80px;
+  transition:border-color 0.2s;
+}
+.modal-obs-field:focus{border-color:var(--caramel)}
+.modal-btns{display:flex;gap:8px;margin-top:4px}
+.modal-btn{
+  flex:1;border:none;border-radius:12px;
+  padding:15px 10px;font-family:"DM Sans",sans-serif;
+  font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.2s;
+}
+.modal-btn.cancel{background:var(--nude);border:1px solid var(--border);color:var(--muted)}
+.modal-btn.cancel:hover{border-color:var(--border2);color:var(--espresso)}
+.modal-btn.pdf{background:#f0ede8;color:#5a4030;border:1px solid var(--border2)}
+.modal-btn.pdf:hover{background:#e8e0d5}
+.modal-btn.wpp{
+  background:linear-gradient(135deg,#25d366 0%,#128c7e 100%);
+  color:#fff;box-shadow:0 3px 12px rgba(37,211,102,0.25);
+}
+.modal-btn.wpp:hover{box-shadow:0 5px 18px rgba(37,211,102,0.35)}
+
+/* ADMIN */
+.admin-page{padding:20px 16px 60px;max-width:580px;margin:0 auto}
+.admin-header{
+  font-family:"Cormorant Garamond",serif;
+  font-size:1.3rem;color:var(--espresso-d);letter-spacing:1px;margin-bottom:4px;
+}
+.admin-sub{font-size:0.72rem;color:var(--muted);margin-bottom:20px}
+.admin-tabs{display:flex;gap:8px;margin-bottom:18px}
+.admin-tab{
+  background:none;border:1px solid var(--border);
+  color:var(--muted);padding:8px 16px;border-radius:20px;
+  font-family:"DM Sans",sans-serif;font-size:0.72rem;
+  cursor:pointer;transition:all 0.2s;
+}
+.admin-tab.active{background:var(--caramel);color:#fff;border-color:var(--caramel)}
+.admin-section{margin-bottom:20px}
+.admin-label{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.admin-input{
+  width:100%;background:var(--nude);border:1.5px solid var(--border);
+  border-radius:12px;padding:12px 14px;
+  font-family:"DM Sans",sans-serif;font-size:14px;color:var(--text);
+  outline:none;transition:border-color 0.2s;
+}
+.admin-input:focus{border-color:var(--caramel)}
+.abtn{
+  background:linear-gradient(135deg,var(--caramel) 0%,var(--caramel2) 100%);
+  color:#fff;border:none;border-radius:12px;
+  padding:12px 20px;font-family:"DM Sans",sans-serif;
+  font-size:0.8rem;font-weight:500;cursor:pointer;
+  box-shadow:0 2px 10px rgba(164,100,60,0.25);
+  transition:all 0.2s;margin-top:8px;
+}
+.abtn:hover{box-shadow:0 4px 16px rgba(164,100,60,0.35)}
+.abtn-outline{
+  background:none;border:1px solid var(--border2);color:var(--muted);
+  border-radius:12px;padding:12px 20px;font-family:"DM Sans",sans-serif;
+  font-size:0.8rem;cursor:pointer;transition:all 0.2s;margin-top:8px;
+}
+.abtn-outline:hover{border-color:var(--danger);color:var(--danger)}
+.wpp-status{
+  display:none;align-items:center;gap:8px;
+  margin-top:10px;padding:10px 14px;
+  background:#f0fbf4;border:1px solid #a8dbb8;border-radius:10px;
+}
+.wpp-status-dot{width:7px;height:7px;border-radius:50%;background:#25d366;flex-shrink:0}
+.wpp-status-text{font-size:0.75rem;color:#2a6040;font-weight:500}
+.catalog-info-card{
+  padding:14px 16px;background:var(--nude);
+  border:1px solid var(--border);border-radius:12px;margin-bottom:14px;
+  font-size:0.8rem;color:var(--muted);
+}
+.catalog-count{font-size:1rem;color:var(--espresso);font-weight:500;margin-bottom:2px}
+
+/* IMPORT */
+.import-drop{
+  border:2px dashed var(--border2);border-radius:14px;
+  padding:30px 20px;text-align:center;cursor:pointer;
+  transition:all 0.2s;background:var(--nude);
+}
+.import-drop:hover,.import-drop.drag{border-color:var(--caramel);background:#fdf0e4}
+.import-drop-icon{font-size:1.6rem;margin-bottom:8px;opacity:0.5}
+.import-drop-label{font-size:0.82rem;color:var(--muted)}
+.import-drop-sub{font-size:0.68rem;color:var(--border2);margin-top:4px}
+.import-preview-card{
+  display:none;background:var(--nude);
+  border:1px solid var(--border);border-radius:14px;
+  padding:14px;margin-top:12px;overflow:hidden;
+}
+.import-preview-title{font-size:0.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.import-preview-sub{font-size:0.72rem;color:var(--muted);margin-bottom:10px}
+.status-ok{color:var(--success)}
+.status-warn{color:#b8860b}
+.status-err{color:var(--danger)}
+.import-table-wrap{overflow-x:auto;max-height:220px;overflow-y:auto;border-radius:8px;border:1px solid var(--border)}
+.import-table{width:100%;border-collapse:collapse;font-size:0.72rem}
+.import-table th{background:var(--border);color:var(--muted);padding:6px 10px;text-align:left;font-weight:500;letter-spacing:0.5px;position:sticky;top:0}
+.import-table td{padding:6px 8px;border-bottom:1px solid var(--border)}
+.import-table input{width:100%;background:none;border:none;outline:none;font-family:"DM Sans",sans-serif;font-size:0.72rem;color:var(--text)}
+.import-actions{display:flex;gap:8px;margin-top:10px}
+
+/* PASSWORD */
+.pw-wrap{max-width:380px;margin:60px auto;padding:0 20px}
+.pw-title{font-family:"Cormorant Garamond",serif;font-size:1.4rem;color:var(--espresso-d);margin-bottom:4px;letter-spacing:1px}
+.pw-sub{font-size:0.72rem;color:var(--muted);margin-bottom:20px}
+.pw-field{
+  width:100%;background:var(--nude);border:1.5px solid var(--border);
+  border-radius:12px;padding:14px 16px;
+  font-family:"DM Sans",sans-serif;font-size:16px;color:var(--text);
+  outline:none;transition:border-color 0.2s;margin-bottom:10px;
+}
+.pw-field:focus{border-color:var(--caramel)}
+.pw-error{font-size:0.72rem;color:var(--danger);margin-top:6px}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--espresso-d);color:#fff;
+  padding:10px 20px;border-radius:20px;
+  font-size:0.78rem;letter-spacing:0.3px;
+  opacity:0;transition:all 0.3s;z-index:500;
+  pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Beauty Business</div>
+  <div class="hero-brand">Mascavo</div>
+  <div class="hero-sub">Catálogo de Pedidos — Representante</div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-left">
+    <div class="nav-dot"></div>
+    <span class="nav-brand">Mascavo</span>
+    <span class="nav-tag">Pedidos</span>
+  </div>
+  <button class="admin-btn" onclick="goAdmin()">admin</button>
+</div>
+
+<!-- CART FAB -->
+<button class="cart-fab" id="cart-fab" onclick="toggleCartDrawer()" aria-label="Ver carrinho">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--caramel2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+  </svg>
+  <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+</button>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="toggleCartDrawer()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer-header">
+    <span class="cart-drawer-title">Meu Pedido</span>
+    <button class="cart-drawer-close" onclick="toggleCartDrawer()">✕</button>
+  </div>
+  <div class="cart-drawer-body" id="cart-drawer-body">
+    <div class="cart-drawer-empty">Nenhum item adicionado ainda.</div>
+  </div>
+  <div class="cart-drawer-footer" id="cart-drawer-footer" style="display:none">
+    <div class="cart-drawer-total">
+      <span>Total</span>
+      <span id="cart-drawer-total-val">R$ 0,00</span>
+    </div>
+    <button class="cart-drawer-confirm" onclick="toggleCartDrawer();openConfirm()">Confirmar Pedido</button>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAR -->
+<div class="overlay" id="confirm-modal" onclick="if(event.target===this)closeConfirm()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Confirmar Pedido</div>
+    <div class="modal-sub">Revise antes de enviar</div>
+    <div class="modal-list" id="modal-list"></div>
+    <div class="modal-obs-wrap">
+      <div class="modal-obs-label">📝 Alguma observação?</div>
+      <textarea class="modal-obs-field" id="obs-field" placeholder="Prazo de entrega, forma de pagamento, endereço..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="closeConfirm()">Voltar</button>
+      <button class="modal-btn pdf" onclick="downloadPDF()">📄 PDF</button>
+      <button class="modal-btn wpp" onclick="sendWpp()">WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- CLIENT PAGE -->
+<div class="page active" id="page-client">
+  <div class="wrap">
+    <div class="ident-card">
+      <div class="ident-label">Identificação do Pedido</div>
+      <div class="ident-grid">
+        <input class="ident-field" id="field-cliente" placeholder="Nome do cliente" autocomplete="off">
+        <input class="ident-field" id="field-loja" placeholder="Nome da loja" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="tabs-wrap">
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-all" onclick="switchTab('all')">Todos os Produtos</button>
+        <button class="tab-btn" id="tab-selected" onclick="switchTab('selected')">Selecionados</button>
+      </div>
+    </div>
+
+    <div class="search-wrap" id="search-wrap">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Buscar produto..." oninput="onSearch(this.value)" autocomplete="off">
+        <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+      </div>
+      <div class="results-info" id="results-info"></div>
+    </div>
+
+    <div class="clear-all-wrap" id="clear-all-wrap" style="display:none">
+      <button class="clear-btn" onclick="clearAll()">Limpar tudo</button>
+    </div>
+
+    <div id="products-container"></div>
+  </div>
+</div>
+
+<!-- PASSWORD PAGE -->
+<div class="page" id="page-password">
+  <div class="pw-wrap">
+    <div class="pw-title">Área Administrativa</div>
+    <div class="pw-sub">Digite a senha para continuar</div>
+    <input class="pw-field" id="pw-input" type="password" placeholder="Senha" onkeydown="if(event.key==='Enter')checkPw()">
+    <div class="pw-error" id="pw-error"></div>
+    <button class="abtn" onclick="checkPw()" style="width:100%;margin-top:4px">Entrar</button>
+    <button class="abtn-outline" onclick="showClient()" style="width:100%;margin-top:0">Voltar</button>
+  </div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div class="page" id="page-admin">
+  <div class="admin-page">
+    <div class="admin-header">Painel Admin</div>
+    <div class="admin-sub">Configurações e gestão do catálogo</div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" id="atab-config" onclick="switchAdminTab('config')">Configurações</button>
+      <button class="admin-tab" id="atab-catalog" onclick="switchAdminTab('catalog')">Catálogo</button>
+    </div>
+
+    <div id="admin-config">
+      <div class="admin-section">
+        <div class="admin-label">WhatsApp do Representante</div>
+        <input class="admin-input" id="wpp-input" type="tel" placeholder="Ex: 5592999999999">
+        <div class="wpp-status" id="wpp-status">
+          <div class="wpp-status-dot"></div>
+          <span class="wpp-status-text" id="wpp-status-text"></span>
+        </div>
+        <button class="abtn" onclick="saveWpp()" style="margin-top:10px">Salvar número</button>
+      </div>
+      <button class="abtn-outline" onclick="showClient()" style="margin-top:8px">← Voltar ao catálogo</button>
+    </div>
+
+    <div id="admin-catalog" style="display:none">
+      <div class="catalog-info-card">
+        <div class="catalog-count" id="catalog-count"></div>
+        <div id="catalog-info"></div>
+      </div>
+      <div class="admin-label">Importar produtos (CSV / XLSX)</div>
+      <div class="import-drop" id="import-drop"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="handleImportDrop(event)">
+        <div class="import-drop-icon">📂</div>
+        <div class="import-drop-label">Arraste um arquivo ou clique para selecionar</div>
+        <div class="import-drop-sub">CSV, XLS ou XLSX com colunas: Código, Descrição, Preço</div>
+        <input type="file" id="import-file" accept=".csv,.xls,.xlsx,.txt" style="display:none" onchange="handleImportFile(this)">
+      </div>
+      <button class="abtn" onclick="document.getElementById('import-file').click()" style="width:100%;margin-top:8px">Selecionar arquivo</button>
+      <div class="import-preview-card" id="import-preview-card">
+        <div class="import-preview-title">Pré-visualização</div>
+        <div class="import-preview-sub" id="import-preview-sub"></div>
+        <div class="import-table-wrap">
+          <table class="import-table">
+            <thead><tr><th>Status</th><th>Código</th><th>Nome</th><th>Preço</th></tr></thead>
+            <tbody id="import-tbody"></tbody>
+          </table>
+        </div>
+        <div class="import-actions">
+          <button class="abtn-outline" onclick="cancelImport()">✕ Cancelar</button>
+          <button class="abtn" id="confirm-import-btn" onclick="confirmImport()">✅ Confirmar e Atualizar Catálogo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="order-footer" id="order-footer">
+  <div class="footer-inner">
+    <div class="footer-info">
+      <div class="footer-label">Total do Pedido</div>
+      <div class="footer-total" id="footer-total">R$ 0,00</div>
+      <div class="footer-items" id="footer-items">Nenhum item selecionado</div>
+    </div>
+    <button class="confirm-btn" id="confirm-btn" onclick="openConfirm()" disabled>Confirmar Pedido</button>
+  </div>
+</div>
+
+<script>
+const products = [
+  // ESPONJAS
+  {cod:"17655",name:"Mascavo ProBlender Esponja de Maquiagem Precision 1 Unidade",price:18.06},
+  {cod:"17654",name:"Mascavo ProBlender Esponja de Maquiagem Original 1 Unidade",price:24.31},
+  {cod:"22200",name:"Mascavo Pro Blender Esponja de Maquiagem Soft Pillow",price:31.19},
+  {cod:"22199",name:"Mascavo Pro Blender Esponja de Maquiagem Dual Tip",price:24.94},
+  {cod:"22198",name:"Mascavo Pro Blender Esponja de Maquiagem Big Precision",price:24.94},
+  // PINCÉIS
+  {cod:"17500",name:"Mascavo Pro Series 01 Pincel de Maquiagem Duplo para Rosto",price:68.69},
+  {cod:"17501",name:"Mascavo Pro Series 02 Pincel de Maquiagem Duplo Angular",price:55.00},
+  {cod:"17502",name:"Mascavo Pro Series 03 Pincel de Maquiagem Multifuncional Rosto",price:55.00},
+  {cod:"17503",name:"Mascavo Pro Series 04 Pincel de Maquiagem para Acabamento e Retoque",price:42.50},
+  {cod:"17504",name:"Mascavo Pro Series 05 Pincel de Maquiagem Duplo para Sombra",price:42.50},
+  {cod:"17505",name:"Mascavo Pro Series 06 Pincel de Maquiagem Duplo para Detalhes",price:38.75},
+  {cod:"17506",name:"Mascavo Pro Series 07 Pincel de Maquiagem para Esfumar",price:27.50},
+  {cod:"19077",name:"Mascavo Pro Series 08 Pincel de Maquiagem Duplo Multifuncional",price:68.13},
+  {cod:"19078",name:"Mascavo Pro Series 09 Pincel de Maquiagem Duplo para Base e Corretivo",price:68.13},
+  {cod:"19079",name:"Mascavo Pro Series 10 Pincel de Maquiagem Duplo para Produtos Cremosos e em Pó",price:80.63},
+  // CURVADOR
+  {cod:"22857",name:"Mascavo Pro Curler Curvador de Cílios Marrom",price:35.56},
+  // BASES SOFT RADIANCE
+  {cod:"17673",name:"Mascavo Soft Radiance Base Líquida 35W 30ml",price:81.19},
+  {cod:"17664",name:"Mascavo Soft Radiance Base Líquida 12C 30ml",price:81.19},
+  {cod:"20802",name:"Mascavo Soft Radiance Base Líquida 15W 30ml",price:81.19},
+  {cod:"17665",name:"Mascavo Soft Radiance Base Líquida 17W 30ml",price:81.19},
+  {cod:"17668",name:"Mascavo Soft Radiance Base Líquida 20W 30ml",price:81.19},
+  {cod:"20806",name:"Mascavo Soft Radiance Base Líquida 30N 30ml",price:81.19},
+  {cod:"17669",name:"Mascavo Soft Radiance Base Líquida 25N 30ml",price:81.19},
+  {cod:"17672",name:"Mascavo Soft Radiance Base Líquida 32W 30ml",price:81.19},
+  {cod:"20805",name:"Mascavo Soft Radiance Base Líquida 28W 30ml",price:81.19},
+  {cod:"20800",name:"Mascavo Soft Radiance Base Líquida 32C 30ml",price:81.19},
+  {cod:"20808",name:"Mascavo Soft Radiance Base Líquida 65N 30ml",price:81.19},
+  {cod:"17803",name:"Mascavo Soft Radiance Base Líquida 60N 30ml",price:81.19},
+  {cod:"20807",name:"Mascavo Soft Radiance Base Líquida 56W 30ml",price:81.19},
+  {cod:"20804",name:"Mascavo Soft Radiance Base Líquida 18C 30ml",price:81.19},
+  {cod:"20803",name:"Mascavo Soft Radiance Base Líquida 10W 30ml",price:81.19},
+  {cod:"20801",name:"Mascavo Soft Radiance Base Líquida 32N 30ml",price:81.19},
+  {cod:"17677",name:"Mascavo Soft Radiance Base Líquida 38N 30ml",price:81.19},
+  {cod:"18936",name:"Mascavo Soft Radiance Base Líquida 16N 30ml",price:81.19},
+  {cod:"18935",name:"Mascavo Soft Radiance Base Líquida 11O 30ml",price:81.19},
+  {cod:"18937",name:"Mascavo Soft Radiance Base Líquida 19O 30ml",price:81.19},
+  {cod:"18939",name:"Mascavo Soft Radiance Base Líquida 29O 30ml",price:81.19},
+  {cod:"18938",name:"Mascavo Soft Radiance Base Líquida 26N 30ml",price:81.19},
+  {cod:"18941",name:"Mascavo Soft Radiance Base Líquida 36N 30ml",price:81.19},
+  {cod:"18950",name:"Mascavo Soft Radiance Base Líquida 70C 30ml",price:81.19},
+  {cod:"20980",name:"Mascavo Soft Radiance Base Líquida 39W 30ml",price:81.19},
+  {cod:"17676",name:"Mascavo Soft Radiance Base Líquida 40N 30ml",price:81.19},
+  {cod:"18944",name:"Mascavo Soft Radiance Base Líquida 51O 30ml",price:81.19},
+  {cod:"18945",name:"Mascavo Soft Radiance Base Líquida 52C 30ml",price:81.19},
+  {cod:"18946",name:"Mascavo Soft Radiance Base Líquida 57O 30ml",price:81.19},
+  {cod:"18947",name:"Mascavo Soft Radiance Base Líquida 57W 30ml",price:81.19},
+  {cod:"18948",name:"Mascavo Soft Radiance Base Líquida 59W 30ml",price:81.19},
+  {cod:"19746",name:"Mascavo Soft Radiance Base Líquida 60C 30ml",price:81.19},
+  {cod:"18942",name:"Mascavo Soft Radiance Base Líquida 39O 30ml",price:81.19},
+  {cod:"18932",name:"Mascavo Soft Radiance Base Líquida 7C 30ml",price:81.19},
+  {cod:"18933",name:"Mascavo Soft Radiance Base Líquida 8N 30ml",price:81.19},
+  {cod:"18934",name:"Mascavo Soft Radiance Base Líquida 9W 30ml",price:81.19},
+  // CORRETIVOS SOFT BLUR
+  {cod:"20809",name:"Mascavo Soft Blur Corretivo Líquido 15N 6g",price:56.19},
+  {cod:"20811",name:"Mascavo Soft Blur Corretivo Líquido 30C 6g",price:56.19},
+  {cod:"18922",name:"Mascavo Soft Blur Corretivo Líquido 17C 6g",price:56.19},
+  {cod:"20810",name:"Mascavo Soft Blur Corretivo Líquido 22N 6g",price:56.19},
+  {cod:"18650",name:"Mascavo Soft Blur Corretivo Líquido 32C 6g",price:56.19},
+  {cod:"17686",name:"Mascavo Soft Blur Corretivo Líquido 35W 6g",price:56.19},
+  {cod:"17683",name:"Mascavo Soft Blur Corretivo Líquido 20W 6g",price:56.19},
+  {cod:"18920",name:"Mascavo Soft Blur Corretivo Líquido 44C 6g",price:56.19},
+  {cod:"18923",name:"Mascavo Soft Blur Corretivo Líquido 33N 6g",price:56.19},
+  {cod:"17799",name:"Mascavo Soft Blur Corretivo Líquido 40W 6g",price:56.19},
+  {cod:"18951",name:"Mascavo Soft Blur Corretivo Líquido Peach 6g",price:56.19},
+  {cod:"18924",name:"Mascavo Soft Blur Corretivo Líquido 34W 6g",price:56.19},
+  {cod:"18925",name:"Mascavo Soft Blur Corretivo Líquido 39N 6g",price:56.19},
+  {cod:"17797",name:"Mascavo Soft Blur Corretivo Líquido 38W 6g",price:56.19},
+  {cod:"18952",name:"Mascavo Soft Blur Corretivo Líquido Orange 6g",price:56.19},
+  {cod:"18926",name:"Mascavo Soft Blur Corretivo Líquido 43W 6g",price:56.19},
+  {cod:"18921",name:"Mascavo Soft Blur Corretivo Líquido 10C 6g",price:56.19},
+  {cod:"18927",name:"Mascavo Soft Blur Corretivo Líquido 45W 6g",price:56.19},
+  {cod:"18928",name:"Mascavo Soft Blur Corretivo Líquido 59W 6g",price:56.19},
+  {cod:"18929",name:"Mascavo Soft Blur Corretivo Líquido 60C 6g",price:56.19},
+  {cod:"20812",name:"Mascavo Soft Blur Corretivo Líquido 42W 6g",price:56.19},
+  {cod:"17801",name:"Mascavo Soft Blur Corretivo Líquido 58N 6g",price:56.19},
+  {cod:"18931",name:"Mascavo Soft Blur Corretivo Líquido 70C 6g",price:56.19},
+  {cod:"18930",name:"Mascavo Soft Blur Corretivo Líquido 65N 6g",price:56.19},
+  // BLUSH
+  {cod:"23325",name:"Mascavo Flush Blush Bastão Hibiscus 6g — Nova Fórmula",price:62.44},
+  {cod:"23327",name:"Mascavo Flush Blush Bastão Oak 6g — Nova Fórmula",price:62.44},
+  {cod:"18907",name:"Mascavo Flush Blush Bastão Freesia 6g",price:62.44},
+  {cod:"23328",name:"Mascavo Flush Blush Bastão Peony 6g — Nova Fórmula",price:62.44},
+  {cod:"23329",name:"Mascavo Flush Blush Bastão Plum 6g — Nova Fórmula",price:62.44},
+  {cod:"23326",name:"Mascavo Flush Blush Bastão Maple 6g — Nova Fórmula",price:62.44},
+  {cod:"23324",name:"Mascavo Flush Blush Bastão Gojiberry 6g — Nova Fórmula",price:62.44},
+  {cod:"18908",name:"Mascavo Flush Blush Bastão Blueberry 6g",price:62.44},
+  // BRONZER
+  {cod:"17695",name:"Mascavo Summer Glow Bronzer Sunkiss 8g",price:68.69},
+  {cod:"18919",name:"Mascavo Summer Glow Bronzer Sahara 8g",price:68.69},
+  {cod:"18915",name:"Mascavo Summer Glow Bronzer Terracota 8g",price:68.69},
+  {cod:"18914",name:"Mascavo Summer Glow Bronzer Golden Hour 8g",price:68.69},
+  {cod:"17696",name:"Mascavo Summer Glow Bronzer Sunset 8g",price:68.69},
+  // CONTORNO
+  {cod:"17658",name:"Mascavo Shape Stick Contorno em Bastão Mocha 6g",price:62.44},
+  {cod:"17659",name:"Mascavo Shape Stick Contorno em Bastão Expresso 6g",price:62.44},
+  {cod:"17657",name:"Mascavo Shape Stick Contorno em Bastão Almond 6g",price:62.44},
+  {cod:"18910",name:"Mascavo Shape Stick Contorno em Bastão Frappé 6g",price:62.44},
+  {cod:"18912",name:"Mascavo Shape Stick Contorno em Bastão Cioccolato 6g",price:62.44},
+  {cod:"17656",name:"Mascavo Shape Stick Contorno em Bastão Latte 6g",price:62.44},
+  {cod:"18911",name:"Mascavo Shape Stick Contorno em Bastão Toffee 6g",price:62.44},
+  {cod:"18909",name:"Mascavo Shape Stick Contorno em Bastão Vanilla 6g",price:62.44},
+  // ILUMINADOR
+  {cod:"17661",name:"Mascavo Glow Stick Iluminador em Bastão Brûlèe 6g",price:62.44},
+  {cod:"17662",name:"Mascavo Glow Stick Iluminador em Bastão Champagne 6g",price:62.44},
+  {cod:"17660",name:"Mascavo Glow Stick Iluminador em Bastão Rosé 6g",price:62.44},
+  // KITS
+  {cod:"23260",name:"Celebration Edition Night Glow",price:149.38},
+  {cod:"23259",name:"Celebration Edition Sparkling Summer",price:149.38},
+  {cod:"23258",name:"Celebration Edition The Classics",price:149.38},
+  // LÁPIS LABIAL
+  {cod:"17507",name:"Mascavo Wonder Lapiseira Labial Mauve 0,3g",price:37.44},
+  {cod:"17508",name:"Mascavo Wonder Lapiseira Labial Pecan 0,3g",price:37.44},
+  {cod:"17511",name:"Mascavo Wonder Lapiseira Labial Rosewood 0,3g",price:37.44},
+  {cod:"17510",name:"Mascavo Wonder Lapiseira Labial Cocoa 0,3g",price:37.44},
+  {cod:"17509",name:"Mascavo Wonder Lapiseira Labial Dusty Rose 0,3g",price:37.44},
+  {cod:"19088",name:"Mascavo Wonder Lips Lapiseira Labial Fig 0,3g",price:37.44},
+  {cod:"19087",name:"Mascavo Wonder Lips Lapiseira Labial Hot Chocolate 0,3g",price:37.44},
+  // LIP BALM
+  {cod:"20312",name:"Mascavo Melted Butter Lip Balm Grape 10g",price:49.94},
+  {cod:"17691",name:"Mascavo Melted Butter Lip Balm Raspberry 10g",price:49.94},
+  {cod:"17694",name:"Mascavo Melted Butter Lip Balm Truffle 10g",price:49.94},
+  {cod:"20299",name:"Mascavo Melted Butter Lip Balm Smooth Berry 10g",price:49.94},
+  {cod:"17690",name:"Mascavo Melted Butter Lip Balm Sugar Candy 10g",price:49.94},
+  {cod:"17693",name:"Mascavo Melted Butter Lip Balm Brown Sugar 10g",price:49.94},
+  {cod:"17692",name:"Mascavo Melted Butter Lip Balm French Vanilla 10g",price:49.94},
+  // ACESSÓRIOS
+  {cod:"21766",name:"Mascavo Bandeja Vaccum Form Institucional Marrom",price:46.00},
+  {cod:"20736",name:"Mascavo Bases e Corretivos Nécessaire Marrom",price:36.00},
+  {cod:"19745",name:"Mascavo Nécessaire Marrom",price:32.00},
+  {cod:"21765",name:"Mascavo Réguas L Institucionais Marrom",price:24.00}
+];
+
+const ADMIN_PW = "mascavo123";
+let wpp = localStorage.getItem("mascavo_wpp") || "";
+let qtys = {}, currentFilter = "", currentTab = "all";
+
+function norm(s){ return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""); }
+function fmt(v){ return "R$ "+v.toFixed(2).replace(".",","); }
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+  document.getElementById("order-footer").style.display = id==="page-client" ? "block" : "none";
+}
+function showClient(){ showPage("page-client"); }
+function goAdmin(){
+  showPage("page-password");
+  document.getElementById("pw-input").value="";
+  document.getElementById("pw-error").textContent="";
+  setTimeout(function(){ document.getElementById("pw-input").focus(); },150);
+}
+function checkPw(){
+  if(document.getElementById("pw-input").value===ADMIN_PW){
+    showPage("page-admin");
+    document.getElementById("catalog-count").textContent=products.length+" produtos ativos";
+    document.getElementById("catalog-info").textContent=products.length+" produtos Mascavo carregados e ativos.";
+    if(wpp){ document.getElementById("wpp-input").value=wpp; document.getElementById("wpp-status").style.display="flex"; document.getElementById("wpp-status-text").textContent="+"+wpp; }
+  } else {
+    document.getElementById("pw-error").textContent="Senha incorreta.";
+    document.getElementById("pw-input").value="";
+    document.getElementById("pw-input").focus();
+  }
+}
+function switchAdminTab(tab){
+  document.getElementById("atab-config").className="admin-tab"+(tab==="config"?" active":"");
+  document.getElementById("atab-catalog").className="admin-tab"+(tab==="catalog"?" active":"");
+  document.getElementById("admin-config").style.display=tab==="config"?"block":"none";
+  document.getElementById("admin-catalog").style.display=tab==="catalog"?"block":"none";
+}
+
+function getCategory(name){
+  var n=norm(name);
+  if(n.indexOf("esponja")>=0||n.indexOf("blender")>=0) return "Esponjas";
+  if(n.indexOf("pincel")>=0||n.indexOf("pro series")>=0) return "Pincéis";
+  if(n.indexOf("curvador")>=0||n.indexOf("curler")>=0) return "Curvador de Cílios";
+  if(n.indexOf("soft radiance")>=0||n.indexOf("base")>=0) return "Bases";
+  if(n.indexOf("corretivo")>=0||n.indexOf("soft blur")>=0) return "Corretivos";
+  if(n.indexOf("blush")>=0) return "Blush";
+  if(n.indexOf("bronzer")>=0||n.indexOf("summer glow")>=0) return "Bronzer";
+  if(n.indexOf("contorno")>=0||n.indexOf("shape stick")>=0) return "Contorno";
+  if(n.indexOf("iluminador")>=0||n.indexOf("glow stick")>=0) return "Iluminador";
+  if(n.indexOf("celebration")>=0) return "Kits";
+  if(n.indexOf("lapiseira")>=0||n.indexOf("wonder")>=0) return "Lápis Labial";
+  if(n.indexOf("lip balm")>=0||n.indexOf("melted butter")>=0) return "Lip Balm";
+  return "Acessórios";
+}
+
+function buildCard(p,words){
+  var i=products.indexOf(p), qty=qtys[i]||0;
+  var dn=p.name;
+  if(words&&words.length>0){
+    words.forEach(function(w){
+      if(!w) return;
+      try{ var rx=new RegExp("("+w+")","gi"); dn=dn.replace(rx,"<em>$1</em>"); }catch(e){}
+    });
+  }
+  var el='<div class="item-card '+(qty>0?"active":"")+'" id="card-'+i+'">';
+  el+='<div class="item-info">';
+  el+='<div class="item-name">'+dn+'</div>';
+  el+='<div class="item-meta"><span class="item-cod">'+p.cod+'</span><span class="item-price">'+fmt(p.price)+'</span></div>';
+  if(qty>0){ el+='<div class="item-subtotal visible">Subtotal: '+fmt(qty*p.price)+'</div>'; }
+  else { el+='<div class="item-subtotal"></div>'; }
+  el+='</div>';
+  el+='<div class="qty-ctrl">';
+  el+='<button class="qty-btn" onclick="changeQty('+i+',-1)" aria-label="Diminuir">−</button>';
+  el+='<span class="qty-num'+(qty>0?" has":"")+'" id="qty-'+i+'">'+qty+'</span>';
+  el+='<button class="qty-btn" onclick="changeQty('+i+',1)" aria-label="Aumentar">+</button>';
+  el+='</div>';
+  el+='</div>';
+  return el;
+}
+
+function renderClient(){
+  var container=document.getElementById("products-container");
+  var words=currentFilter?currentFilter.trim().split(/\s+/).filter(Boolean):[];
+  var list;
+  if(currentTab==="selected"){
+    list=products.filter(function(p,i){ return (qtys[i]||0)>0; });
+  } else if(currentFilter){
+    var tokens=norm(currentFilter).split(/\s+/).filter(Boolean);
+    list=products.filter(function(p){
+      var haystack=norm(p.name)+" "+norm(p.cod);
+      return tokens.every(function(t){ return haystack.indexOf(t)>=0; });
+    });
+  } else {
+    list=products;
+  }
+  var info=document.getElementById("results-info");
+  if(currentFilter && currentTab==="all"){
+    info.textContent=list.length+" resultado"+(list.length!==1?"s":"")+" encontrado"+(list.length!==1?"s":"");
+  } else { info.textContent=""; }
+  if(list.length===0){
+    var msg=currentTab==="selected"?"Nenhum produto selecionado ainda.":"Nenhum produto encontrado para \""+currentFilter+"\".";
+    container.innerHTML='<div class="no-results"><div>✦</div><p>'+msg+'</p></div>';
+    return;
+  }
+  // Group by category
+  var cats={}, catOrder=[];
+  list.forEach(function(p){
+    var c=getCategory(p.name);
+    if(!cats[c]){ cats[c]=[]; catOrder.push(c); }
+    cats[c].push(p);
+  });
+  var html="";
+  catOrder.forEach(function(c){
+    html+='<div class="category-header">'+c+'</div>';
+    html+='<div class="items-list">';
+    cats[c].forEach(function(p){ html+=buildCard(p,words); });
+    html+='</div>';
+  });
+  container.innerHTML=html;
+}
+
+function changeQty(i,delta){
+  var q=(qtys[i]||0)+delta;
+  if(q<0) q=0;
+  qtys[i]=q;
+  updateCard(i);
+  updateFooter();
+  updateCartBadge();
+}
+
+function updateCard(i){
+  var card=document.getElementById("card-"+i);
+  if(!card) return;
+  var q=qtys[i]||0;
+  var qEl=document.getElementById("qty-"+i);
+  if(qEl){ qEl.textContent=q; qEl.className="qty-num"+(q>0?" has":""); }
+  card.className="item-card"+(q>0?" active":"");
+  var sub=card.querySelector(".item-subtotal");
+  if(sub){
+    if(q>0){ sub.textContent="Subtotal: "+fmt(q*products[i].price); sub.className="item-subtotal visible"; }
+    else { sub.textContent=""; sub.className="item-subtotal"; }
+  }
+}
+
+function updateFooter(){
+  var total=0, count=0, units=0;
+  products.forEach(function(p,i){
+    var q=qtys[i]||0;
+    if(q>0){ total+=q*p.price; count++; units+=q; }
+  });
+  document.getElementById("footer-total").textContent=fmt(total);
+  document.getElementById("footer-items").textContent=
+    units>0?(units+" unidade"+(units!==1?"s":"")+" — "+count+" produto"+(count!==1?"s":"")):"Nenhum item selecionado";
+  document.getElementById("confirm-btn").disabled=units===0;
+  var clearWrap=document.getElementById("clear-all-wrap");
+  if(clearWrap) clearWrap.style.display=units>0?"flex":"none";
+}
+
+function updateCartBadge(){
+  var units=0;
+  products.forEach(function(p,i){ units+=(qtys[i]||0); });
+  var badge=document.getElementById("cart-badge");
+  if(units>0){ badge.style.display="flex"; badge.textContent=units>99?"99+":units; }
+  else { badge.style.display="none"; }
+}
+
+function switchTab(tab){
+  currentTab=tab;
+  document.getElementById("tab-all").className="tab-btn"+(tab==="all"?" active":"");
+  document.getElementById("tab-selected").className="tab-btn"+(tab==="selected"?" active":"");
+  document.getElementById("search-wrap").style.display=tab==="all"?"block":"none";
+  if(tab==="all") currentFilter="";
+  renderClient();
+}
+
+function onSearch(val){
+  currentFilter=val.trim();
+  document.getElementById("search-clear").className="search-clear"+(val?"  visible":"");
+  renderClient();
+}
+function clearSearch(){
+  document.getElementById("search-input").value="";
+  currentFilter="";
+  document.getElementById("search-clear").className="search-clear";
+  document.getElementById("results-info").textContent="";
+  renderClient();
+  document.getElementById("search-input").focus();
+}
+function clearAll(){
+  qtys={};
+  renderClient();
+  updateFooter();
+  updateCartBadge();
+  toast("Pedido limpo!");
+}
+
+// CART DRAWER
+function toggleCartDrawer(){
+  var overlay=document.getElementById("cart-drawer-overlay");
+  var drawer=document.getElementById("cart-drawer");
+  var isOpen=drawer.classList.contains("open");
+  if(isOpen){ drawer.classList.remove("open"); overlay.classList.remove("open"); }
+  else { renderCartDrawer(); drawer.classList.add("open"); overlay.classList.add("open"); }
+}
+function renderCartDrawer(){
+  var body=document.getElementById("cart-drawer-body");
+  var footer=document.getElementById("cart-drawer-footer");
+  var selected=products.filter(function(p,i){ return (qtys[i]||0)>0; });
+  if(selected.length===0){
+    body.innerHTML='<div class="cart-drawer-empty">Nenhum item adicionado ainda.</div>';
+    footer.style.display="none";
+    return;
+  }
+  var total=0, html="";
+  selected.forEach(function(p){
+    var i=products.indexOf(p), q=qtys[i]||0;
+    var sub=q*p.price; total+=sub;
+    html+='<div class="cart-drawer-item">';
+    html+='<div class="cdi-info"><div class="cdi-name">'+p.name+'</div><div class="cdi-qty">'+q+'x — '+fmt(p.price)+'</div></div>';
+    html+='<div class="cdi-price">'+fmt(sub)+'</div>';
+    html+='</div>';
+  });
+  body.innerHTML=html;
+  document.getElementById("cart-drawer-total-val").textContent=fmt(total);
+  footer.style.display="block";
+}
+
+// MODAL CONFIRM
+function openConfirm(){
+  var selected=products.filter(function(p,i){ return (qtys[i]||0)>0; });
+  if(selected.length===0){ toast("Selecione ao menos um produto"); return; }
+  var total=0, html="";
+  selected.forEach(function(p){
+    var i=products.indexOf(p), q=qtys[i]||0;
+    var sub=q*p.price; total+=sub;
+    html+='<div class="modal-row">';
+    html+='<div><div class="modal-row-name">'+p.name+'</div><div class="modal-row-qty">'+q+' un. × '+fmt(p.price)+'</div></div>';
+    html+='<div class="modal-row-price">'+fmt(sub)+'</div>';
+    html+='</div>';
+  });
+  html+='<div class="modal-total-row"><span class="modal-total-label">Total</span><span class="modal-total-val">'+fmt(total)+'</span></div>';
+  document.getElementById("modal-list").innerHTML=html;
+  document.getElementById("confirm-modal").className="overlay open";
+}
+function closeConfirm(){ document.getElementById("confirm-modal").className="overlay"; }
+
+function buildOrderText(){
+  var cliente=document.getElementById("field-cliente").value.trim()||"(não informado)";
+  var loja=document.getElementById("field-loja").value.trim()||"(não informada)";
+  var obs=document.getElementById("obs-field").value.trim();
+  var selected=products.filter(function(p,i){ return (qtys[i]||0)>0; });
+  var total=0;
+  var txt="*PEDIDO MASCAVO*\n";
+  txt+="──────────────────\n";
+  txt+="👤 Cliente: "+cliente+"\n";
+  txt+="🏪 Loja: "+loja+"\n";
+  txt+="──────────────────\n";
+  selected.forEach(function(p){
+    var i=products.indexOf(p), q=qtys[i]||0;
+    var sub=q*p.price; total+=sub;
+    txt+="• "+p.name+"\n";
+    txt+="  "+q+" un. × "+fmt(p.price)+" = "+fmt(sub)+"\n";
+  });
+  txt+="──────────────────\n";
+  txt+="💰 *TOTAL: "+fmt(total)+"*\n";
+  if(obs){ txt+="\n📝 Obs: "+obs; }
+  return txt;
+}
+
+function sendWpp(){
+  if(!wpp){ toast("Configure o WhatsApp no painel admin"); return; }
+  var txt=buildOrderText();
+  var url="https://wa.me/"+wpp+"?text="+encodeURIComponent(txt);
+  window.open(url,"_blank");
+  closeConfirm();
+}
+
+function downloadPDF(){
+  var cliente=document.getElementById("field-cliente").value.trim()||"Pedido";
+  var loja=document.getElementById("field-loja").value.trim()||"";
+  var obs=document.getElementById("obs-field").value.trim();
+  var selected=products.filter(function(p,i){ return (qtys[i]||0)>0; });
+  var total=0;
+  var rows="";
+  selected.forEach(function(p){
+    var i=products.indexOf(p), q=qtys[i]||0;
+    var sub=q*p.price; total+=sub;
+    rows+='<tr><td>'+p.cod+'</td><td>'+p.name+'</td><td style="text-align:center">'+q+'</td><td style="text-align:right">'+fmt(p.price)+'</td><td style="text-align:right">'+fmt(sub)+'</td></tr>';
+  });
+  var now=new Date();
+  var dateStr=now.toLocaleDateString("pt-BR")+" "+now.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+  var html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">';
+  html+='<style>body{font-family:Arial,sans-serif;padding:32px;color:#1a0e08;font-size:13px}';
+  html+='.header{text-align:center;margin-bottom:28px;border-bottom:2px solid #c4885a;padding-bottom:18px}';
+  html+='.brand{font-size:28px;letter-spacing:8px;text-transform:uppercase;color:#4a2518;font-weight:bold}';
+  html+='.sub{font-size:11px;color:#7a6358;letter-spacing:2px;margin-top:4px}';
+  html+='.info{display:flex;gap:30px;margin-bottom:20px;background:#fdf6f0;padding:14px 16px;border-radius:8px;border:1px solid #f0e0d0}';
+  html+='.info-row{margin-bottom:4px;font-size:12px}.info-label{color:#7a6358;font-size:11px;text-transform:uppercase;letter-spacing:1px}';
+  html+='table{width:100%;border-collapse:collapse;margin-bottom:16px}';
+  html+='th{background:#6b3a2a;color:#fff;padding:8px 10px;text-align:left;font-size:11px;letter-spacing:1px}';
+  html+='td{padding:7px 10px;border-bottom:1px solid #f0e0d0;font-size:12px}';
+  html+='tr:nth-child(even) td{background:#fdf6f0}';
+  html+='.total-row{font-size:15px;font-weight:bold;color:#4a2518;text-align:right;padding:12px 0;border-top:2px solid #c4885a}';
+  html+='.obs{margin-top:16px;background:#fdf6f0;border:1px solid #f0e0d0;border-radius:8px;padding:12px 14px;font-size:12px;color:#7a6358}';
+  html+='.footer-date{text-align:right;font-size:10px;color:#a89080;margin-top:20px}';
+  html+='</style></head><body>';
+  html+='<div class="header"><div class="brand">Mascavo</div><div class="sub">Pedido de Compra</div></div>';
+  html+='<div class="info"><div><div class="info-label">Cliente</div><div class="info-row">'+cliente+'</div><div class="info-label" style="margin-top:8px">Loja</div><div class="info-row">'+loja+'</div></div>';
+  html+='<div><div class="info-label">Data</div><div class="info-row">'+dateStr+'</div></div></div>';
+  html+='<table><thead><tr><th>Código</th><th>Produto</th><th style="text-align:center">Qtd</th><th style="text-align:right">Unit.</th><th style="text-align:right">Subtotal</th></tr></thead><tbody>';
+  html+=rows;
+  html+='</tbody></table>';
+  html+='<div class="total-row">TOTAL: '+fmt(total)+'</div>';
+  if(obs){ html+='<div class="obs"><strong>Observações:</strong><br>'+obs+'</div>'; }
+  html+='<div class="footer-date">Gerado em '+dateStr+' — Mascavo Beauty Business</div>';
+  html+='</body></html>';
+  var blob=new Blob([html],{type:"text/html;charset=utf-8"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url;
+  a.download="pedido-mascavo-"+(cliente.replace(/\s+/g,"-").toLowerCase())+"-"+now.getFullYear()+(now.getMonth()+1<10?"0":"")+(now.getMonth()+1)+(now.getDate()<10?"0":"")+now.getDate()+".html";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast("PDF gerado!");
+  closeConfirm();
+}
+
+function saveWpp(){
+  var v=document.getElementById("wpp-input").value.trim().replace(/[^0-9]/g,"");
+  if(!v||v.length<10){ toast("Número inválido"); return; }
+  wpp=v; localStorage.setItem("mascavo_wpp",wpp);
+  document.getElementById("wpp-status").style.display="flex";
+  document.getElementById("wpp-status-text").textContent="+"+wpp;
+  toast("WhatsApp salvo!");
+}
+
+// IMPORT
+var importedRows=[];
+function handleImportDrop(e){
+  e.preventDefault();
+  document.getElementById("import-drop").classList.remove("drag");
+  if(e.dataTransfer.files[0]) readImportFile(e.dataTransfer.files[0]);
+}
+function handleImportFile(input){
+  if(input.files[0]) readImportFile(input.files[0]);
+  input.value="";
+}
+function readImportFile(file){
+  var ext=file.name.split(".").pop().toLowerCase();
+  var reader=new FileReader();
+  if(ext==="csv"||ext==="txt"){
+    reader.onload=function(e){ parseImportCSV(e.target.result); };
+    reader.readAsText(file,"UTF-8");
+  } else {
+    reader.onload=function(e){ parseImportXLSX(e.target.result); };
+    reader.readAsArrayBuffer(file);
+  }
+}
+function parseImportXLSX(buffer){
+  if(typeof XLSX==="undefined"){ toast("Biblioteca XLSX não carregada"); return; }
+  var wb=XLSX.read(buffer,{type:"array"});
+  var ws=wb.Sheets[wb.SheetNames[0]];
+  var raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:""});
+  processImportRaw(raw);
+}
+function parseImportCSV(text){
+  var lines=text.split("\n").filter(function(l){ return l.trim(); });
+  var sep=lines[0].indexOf(";")>=0?";":",";
+  var raw=lines.map(function(l){ return l.split(sep).map(function(c){ return c.trim().replace(/["\r]/g,""); }); });
+  processImportRaw(raw);
+}
+function processImportRaw(raw){
+  if(!raw||raw.length<2){ toast("Arquivo vazio ou inválido"); return; }
+  var headerIdx=-1,nameCol=-1,priceCol=-1,codCol=-1;
+  for(var i=0;i<Math.min(raw.length,10);i++){
+    var row=raw[i].map(function(c){ return norm(String(c||"")); });
+    var ni=row.findIndex(function(c){ return /descri|nome|produto|item/.test(c); });
+    var pi=row.findIndex(function(c){ return c==="tabela"; });
+    if(pi<0) pi=row.findIndex(function(c){ return /preco|preço|price|valor/.test(c); });
+    var ci=row.findIndex(function(c){ return /cod|cód|codigo/.test(c); });
+    if(ni>=0&&pi>=0){ headerIdx=i; nameCol=ni; priceCol=pi; codCol=ci; break; }
+  }
+  if(headerIdx<0){ toast("Colunas DESCRICAO e Preço não encontradas"); return; }
+  importedRows=[];
+  for(var i=headerIdx+1;i<raw.length;i++){
+    var row=raw[i];
+    if(!row||!row[nameCol]) continue;
+    var name=String(row[nameCol]).trim();
+    var priceRaw=String(row[priceCol]||"").replace(/[R$\s]/g,"").replace(",",".");
+    var price=parseFloat(priceRaw);
+    var cod=codCol>=0?String(row[codCol]||"").trim():"";
+    var status="ok",statusLabel="✅ OK";
+    if(!name){ status="err"; statusLabel="❌ Sem nome"; }
+    else if(isNaN(price)||price<=0){ status="warn"; statusLabel="⚠️ Sem preço"; }
+    else if(!cod){ status="warn"; statusLabel="⚠️ Sem código"; }
+    var existing=products.find(function(p){ return norm(p.name)===norm(name); });
+    if(existing){ status="warn"; statusLabel="⚠️ Já existe"; }
+    importedRows.push({cod:cod,name:name,price:isNaN(price)?0:price,status:status,statusLabel:statusLabel});
+  }
+  renderImportPreview();
+}
+function renderImportPreview(){
+  var ok=importedRows.filter(function(r){ return r.status==="ok"; }).length;
+  var warn=importedRows.filter(function(r){ return r.status==="warn"; }).length;
+  var err=importedRows.filter(function(r){ return r.status==="err"; }).length;
+  document.getElementById("import-preview-sub").innerHTML=
+    importedRows.length+" linhas | "+
+    '<span class="status-ok">'+ok+" OK</span>  "+
+    '<span class="status-warn">'+warn+" avisos</span>  "+
+    '<span class="status-err">'+err+" erros</span>";
+  var tbody=document.getElementById("import-tbody");
+  tbody.innerHTML=importedRows.map(function(r,i){
+    return "<tr>"
+      +"<td><span class=\"status-"+r.status+"\">"+r.statusLabel+"</span></td>"
+      +"<td><input value=\""+r.cod+"\" onchange=\"importedRows["+i+"].cod=this.value\"></td>"
+      +"<td><input value=\""+r.name+"\" onchange=\"importedRows["+i+"].name=this.value\"></td>"
+      +"<td><input value=\""+r.price.toFixed(2).replace(".",",")+"\" onchange=\"importedRows["+i+"].price=parseFloat(this.value.replace(',','.'))||0\"></td>"
+      +"</tr>";
+  }).join("");
+  document.getElementById("import-preview-card").style.display="block";
+}
+function confirmImport(){
+  var added=0;
+  importedRows.forEach(function(r){
+    if(!r.name||r.price<=0) return;
+    var exists=products.find(function(p){ return norm(p.name)===norm(r.name); });
+    if(!exists){ products.push({cod:r.cod,name:r.name,price:r.price}); added++; }
+  });
+  document.getElementById("import-preview-card").style.display="none";
+  document.getElementById("catalog-count").textContent=products.length+" produtos ativos";
+  document.getElementById("catalog-info").textContent=products.length+" produtos Mascavo carregados e ativos.";
+  toast(added+" produto(s) adicionado(s) ao catálogo!");
+  importedRows=[];
+}
+function cancelImport(){
+  importedRows=[];
+  document.getElementById("import-preview-card").style.display="none";
+  document.getElementById("import-file").value="";
+}
+
+// TOAST
+function toast(msg){
+  var el=document.getElementById("toast");
+  el.textContent=msg;
+  el.className="toast show";
+  setTimeout(function(){ el.className="toast"; },2500);
+}
+
+// INIT
+renderClient();
+updateFooter();
+</script>
+</body>
+</html>
